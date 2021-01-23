@@ -10,9 +10,11 @@ from .models import AuthToken, Profile, TOKEN_TYPE_PASSWORD_RESET
 
 
 class MyUserCreationForm(UserCreationForm):
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
+
     class Meta(UserCreationForm.Meta):
-        fields = ['username', 'password1', 'password2',
-                  'first_name', 'last_name', 'email']
+        fields = ['username', 'password1', 'password2', 'email']
 
     def save(self, commit=True):
         if settings.ACTIVATE_USERS_EMAIL:

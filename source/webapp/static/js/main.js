@@ -49,6 +49,7 @@ async function add(event) {
     try {
         let response = await makeRequest(url, 'POST');
         console.log(response);
+        event.target.parentElement.parentElement.parentElement.parentElement.parentElement.remove();
 
     }
     catch (error) {
@@ -69,6 +70,7 @@ async function remove(event) {
     try {
         let response = await makeRequest(url , "DELETE");
         console.log(response);
+        event.target.parentElement.parentElement.parentElement.parentElement.parentElement.remove();
 
     }
     catch (error) {

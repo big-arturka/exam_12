@@ -22,10 +22,11 @@
                             <h5 class="card-title"><a href="{% url 'accounts:detail' user.pk %}">{{ user.username }}</a></h5>
                             <p class="card-text"><small class="text-muted">Имя: {{ user.first_name }}</small></p>
                             <p class="card-text"><small class="text-muted">Фамилия: {{ user.last_name }}</small></p>
-                            {% if user.is_authenticated %}
+                            <hr>
+                            {% if request.user.is_authenticated %}
                                 <p>
-                                    <a class="add" href="{% url 'api:add' user.pk %}">Add to friends</a>
-                                    <a class="msg  btn btn-outline-success" href="{% url 'webapp:write_message' user.pk %}">Send a message</a>
+                                    <a class="add" href="{% url 'api:add' user.pk %}">Add</a>
+                                    <a class="msg btn btn-outline-success" href="{% url 'webapp:write_message' user.pk %}">Message</a>
                                 </p>
                             {% endif %}
                         </div>

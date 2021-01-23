@@ -20,8 +20,11 @@ class IndexView(ListView):
 
     def get_queryset(self):
         user = self.request.user
-        friend_ids = Friend.objects.filter(user=self.request.user).values_list('friend', flat=True)
-        return User.objects.exclude(username=user.username).exclude(id__in=friend_ids)
+        if self.request.user.is_authenticated:
+            friend_ids = Friend.objects.filter(user=self.request.user).values_list('friend', flat=True)
+            return User.objects.exclude(username=user.username).exclude(id__in=friend_ids)
+        else:
+            return User.objects.all()
 
 
 class RegisterView(CreateView):

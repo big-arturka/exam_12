@@ -39,8 +39,8 @@
             <div class="card mb-3" style="max-width: 540px;">
                 <div class="row no-gutters">
                     <div class="col-md-4">
-                        {% if friend.friend.avatar %}
-                            <img src="{{ friend.friend.avatar.url }}" style="height: 150px" class="card-img" alt="Avatar">
+                        {% if friend.friend.profile.avatar %}
+                            <img src="{{ friend.friend.profile.avatar.url }}" style="height: 150px" class="card-img" alt="Avatar">
                         {% else %}
                             <img src="{% static 'img/avatar.png' %}" style="height: 150px" class="card-img" alt="Pusto">
                         {% endif %}
@@ -50,10 +50,10 @@
                             <h5 class="card-title"><a href="{% url 'accounts:detail' friend.friend.pk %}">{{ friend.friend.username }}</a></h5>
                             <p class="card-text"><small class="text-muted">Имя: {{ friend.friend.first_name }}</small></p>
                             <p class="card-text"><small class="text-muted">Фамилия: {{ friend.friend.last_name }}</small></p>
+                            <hr>
                             {% if user.is_authenticated %}
                                 <p>
-                                    <a class="remove" href="{% url 'api:remove' friend.friend.pk %}">Remove from friends</a>
-                                    <a class="msg" href="{% url 'webapp:write_message' user.pk %}">Send a message</a>
+                                    <a class="remove" href="{% url 'api:remove' friend.friend.pk %}">Remove</a>
                                 </p>
                             {% endif %}
                         </div>

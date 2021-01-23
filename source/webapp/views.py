@@ -19,7 +19,7 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
         message = form.save(commit=False)
         message.author = author
         message.recipient = recipient
-        if message.author == message.recipient:
+        if message.recipient == self.request.user:
             return HttpResponse(status=400)
         else:
             message.save()
