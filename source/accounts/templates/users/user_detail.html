@@ -26,6 +26,12 @@
     <p>Surname: {{ user_obj.last_name }}</p>
     <p>Birth date: {{ user_obj.profile.birth_date|date:'d.m.Y' }}</p>
     <p>Email: {{ user_obj.email }}</p>
+    {% if user.is_authenticated %}
+        <p>
+            <a class="remove" href="{% url 'api:remove' user_obj.pk %}">Remove from friends</a>
+            <a class="msg" href="{% url 'webapp:write_message' user_obj.pk %}">Send a message</a>
+        </p>
+    {% endif %}
 
     {% if user.is_authenticated %}
         <h2 class="text-center">Friends:</h2>
@@ -47,6 +53,7 @@
                             {% if user.is_authenticated %}
                                 <p>
                                     <a class="remove" href="{% url 'api:remove' friend.friend.pk %}">Remove from friends</a>
+                                    <a class="msg" href="{% url 'webapp:write_message' user.pk %}">Send a message</a>
                                 </p>
                             {% endif %}
                         </div>

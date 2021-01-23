@@ -4,14 +4,14 @@ from django.db import models
 
 
 class Message(models.Model):
-    author: AbstractUser = models.OneToOneField(get_user_model(), related_name='author_message',
+    author: AbstractUser = models.ForeignKey(get_user_model(), related_name='author_message',
                                                 on_delete=models.CASCADE, verbose_name='Отправитель')
-    recipient: AbstractUser = models.OneToOneField(get_user_model(), related_name='recipient_message',
+    recipient: AbstractUser = models.ForeignKey(get_user_model(), related_name='recipient_message',
                                                    on_delete=models.CASCADE, verbose_name='Получатель')
     text = models.TextField(max_length=2000, verbose_name='Текст сообщения')
 
     def __str__(self):
-        return self.author
+        return f'{self.author}-{self.recipient}'
 
     class Meta:
         verbose_name = 'Сообщение'

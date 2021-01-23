@@ -23,10 +23,11 @@
                             <p class="card-text"><small class="text-muted">Имя: {{ user.first_name }}</small></p>
                             <p class="card-text"><small class="text-muted">Фамилия: {{ user.last_name }}</small></p>
                             {% if user.is_authenticated %}
-                            <p>
-                                <a class="add" href="{% url 'api:add' user.pk %}">Add to friends</a>
-                            </p>
-                    {% endif %}
+                                <p>
+                                    <a class="add" href="{% url 'api:add' user.pk %}">Add to friends</a>
+                                    <a class="msg" href="{% url 'webapp:write_message' user.pk %}">Send a message</a>
+                                </p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

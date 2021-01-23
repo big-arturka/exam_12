@@ -1,10 +1,8 @@
 from django import forms
-# from webapp.models import Photo
-#
-#
-# class PhotoForm(forms.ModelForm):
-#     class Meta:
-#         model = Photo
-#         fields = ['image', 'signature']
-#         widgets = {'signature': forms.Textarea(attrs={'class': 'form-signature'})}
-#
+from webapp.models import Message
+
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['text']

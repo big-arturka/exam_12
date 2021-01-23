@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}New Message{% endblock %}
+
+{% block menu %}
+{% endblock %}
+
+{% block content %}
+    <div class="form">
+        <h1 class="title">Write message</h1>
+
+        {% url 'message_create' as action_url %}
+        {% include 'partial/form.html' with action_url=action_url form_method='post' button_text='Отправить'%}
+
+    </div>
+{% endblock %}
