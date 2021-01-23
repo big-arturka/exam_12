@@ -2,20 +2,29 @@ from django.contrib.auth import get_user_model, login, update_session_auth_hash
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic import View, FormView, DetailView, CreateView, UpdateView
+from django.views.generic import View, FormView, DetailView, CreateView, UpdateView, ListView
 from django.conf import settings
 
 from accounts.forms import MyUserCreationForm, UserChangeForm, ProfileChangeForm, \
     PasswordChangeForm, PasswordResetEmailForm, PasswordResetForm
-from webapp.models import Photo
 from .models import AuthToken, Profile
+
+
+class IndexView(ListView):
+    template_name = 'users/index.html'
+    context_object_name = 'users'
+    paginate_by = 10
+    paginate_orphans = 4
+
+    def get_queryset(self):
+        return User.objects.all()
 
 
 class RegisterView(CreateView):
     model = User
-    template_name = 'user_create.html'
+    template_name = 'users/user_create.html'
     form_class = MyUserCreationForm
 
     def form_valid(self, form):
@@ -54,23 +63,16 @@ class RegisterActivateView(View):
 
 class UserDetailView(DetailView):
     model = get_user_model()
-    template_name = 'user_detail.html'
+    template_name = 'users/user_detail.html'
     context_object_name = 'user_obj'
     paginate_related_by = 5
     paginate_related_orphans = 0
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        date = Photo.objects.filter(favorite_photo__author=self.kwargs.get('pk'))
-        print(date)
-        context['photos'] = date
-        return context
 
 
 class UserChangeView(UserPassesTestMixin, UpdateView):
     model = get_user_model()
     form_class = UserChangeForm
-    template_name = 'user_change.html'
+    template_name = 'users/user_change.html'
     context_object_name = 'user_obj'
 
     def test_func(self):
@@ -112,7 +114,7 @@ class UserChangeView(UserPassesTestMixin, UpdateView):
 
 class UserPasswordChangeView(LoginRequiredMixin, UpdateView):
     model = get_user_model()
-    template_name = 'user_password_change.html'
+    template_name = 'users/user_password_change.html'
     form_class = PasswordChangeForm
     context_object_name = 'user_obj'
 
@@ -130,7 +132,7 @@ class UserPasswordChangeView(LoginRequiredMixin, UpdateView):
 
 class UserPasswordResetEmailView(FormView):
     form_class = PasswordResetEmailForm
-    template_name = 'password_reset_email.html'
+    template_name = 'users/password_reset_email.html'
     success_url = reverse_lazy('webapp:index')
 
     def form_valid(self, form):
@@ -141,7 +143,7 @@ class UserPasswordResetEmailView(FormView):
 class UserPasswordResetView(UpdateView):
     model = User
     form_class = PasswordResetForm
-    template_name = 'password_reset.html'
+    template_name = 'users/password_reset.html'
     success_url = reverse_lazy('accounts:login')
 
     def get_object(self, queryset=None):
