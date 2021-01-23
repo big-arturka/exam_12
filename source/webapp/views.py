@@ -1,7 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, DetailView
 
 from webapp.forms import MessageForm
 from webapp.models import Message
@@ -18,25 +19,34 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
         message = form.save(commit=False)
         message.author = author
         message.recipient = recipient
-        message.save()
-        return redirect('index')
+        if message.author == message.recipient:
+            return HttpResponse(status=400)
+        else:
+            message.save()
+            return redirect('webapp:sent_msg')
 
 
-class IncomingMessageView(ListView):
+class IncomingMessageView(LoginRequiredMixin, ListView):
     template_name = 'incoming_message.html'
     context_object_name = 'recipient_messages'
-    paginate_by = 5
-    paginate_orphans = 2
+    paginate_by = 3
+    paginate_orphans = 1
 
     def get_queryset(self):
         return Message.objects.filter(recipient=self.request.user)
 
 
-class SentMessageView(ListView):
+class SentMessageView(LoginRequiredMixin, ListView):
     template_name = 'sent_message.html'
     context_object_name = 'sent_messages'
-    paginate_by = 5
-    paginate_orphans = 2
+    paginate_by = 3
+    paginate_orphans = 1
 
     def get_queryset(self):
-        return Message.objects.filter(author=self.request.user)
+        return Message.objects.filter(author=self.request.user).order_by('-created_at')
+
+
+class DetailMessageView(LoginRequiredMixin, DetailView):
+    model = Message
+    template_name = 'detail_message.html'
+    context_object_name = 'message'

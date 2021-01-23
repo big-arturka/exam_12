@@ -11,10 +11,18 @@
                 Отправлено
             </div>
             <div class="card-body">
-                <h5 class="card-title">Кому: {{ message.recipient }}</h5>
-                <p class="card-text">{{ message.text }}</p>
+                <h5 class="card-title">Кому: <a href="{% url 'accounts:detail' message.recipient.pk %}">{{ message.recipient }}</a></h5>
                 <h5 class="card-title">Автор: {{ message.recipient }}</h5>
+                <hr>
+                <p class="card-text">{{ message.created_at }}</p>
+                <a class="btn btn-block btn-outline-dark" href="{% url 'webapp:detail_msg' message.pk %}">Read</a>
             </div>
         </div>
     {% endfor %}
+
+    <div class="pagina" style="margin: 50px 50px 50px 50px;">
+        {% if is_paginated %}
+            {% include 'partial/pagination.html' %}
+        {% endif %}
+    </div>
 {% endblock %}

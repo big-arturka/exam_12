@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Chat Rooms{% endblock %}
+
+{% block menu %}
+{% endblock %}
+
+{% block content %}
+    <div class="card msg-card">
+        <div class="card-header">
+            Получено
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Кому: {{ message.recipient }}</h5>
+            <h5 class="card-title">Автор: <a href="{% url 'accounts:detail' message.author.pk %}">{{ message.author }}</a></h5>
+            <hr>
+            <p>{{ message.text }}</p>
+            <hr>
+            <p class="card-text">{{ message.created_at }}</p>
+        </div>
+    </div>
+{% endblock %}

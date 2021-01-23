@@ -16,10 +16,12 @@ class IndexView(ListView):
     template_name = 'users/index.html'
     context_object_name = 'users'
     paginate_by = 3
-    paginate_orphans = 2
+    paginate_orphans = 1
 
     def get_queryset(self):
-        return User.objects.all()
+        user = self.request.user
+        friend_ids = Friend.objects.filter(user=self.request.user).values_list('friend', flat=True)
+        return User.objects.exclude(username=user.username).exclude(id__in=friend_ids)
 
 
 class RegisterView(CreateView):

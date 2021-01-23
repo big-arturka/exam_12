@@ -26,10 +26,10 @@
     <p>Surname: {{ user_obj.last_name }}</p>
     <p>Birth date: {{ user_obj.profile.birth_date|date:'d.m.Y' }}</p>
     <p>Email: {{ user_obj.email }}</p>
-    {% if user.is_authenticated %}
+    {% if user.is_authenticated and user_obj != request.user %}
         <p>
             <a class="remove" href="{% url 'api:remove' user_obj.pk %}">Remove from friends</a>
-            <a class="msg" href="{% url 'webapp:write_message' user_obj.pk %}">Send a message</a>
+            <a class="msg btn btn-outline-success" href="{% url 'webapp:write_message' user_obj.pk %}">Send a message</a>
         </p>
     {% endif %}
 
