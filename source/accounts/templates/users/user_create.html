@@ -15,5 +15,11 @@
 
 {% block content %}
     <h1>Sign Up</h1>
-    {% include 'partial/form.html' with form_method='post' button_text="Зарегистрироваться" %}
+    <form action="{% url 'accounts:create' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% include 'partial/form.html' with form=form fields_only=True %}
+        {% include 'partial/form.html' with form=profile_form fields_only=True %}
+        <br>
+        <input class="btn btn-outline-dark" type="submit" value="Submit">
+    </form>
 {% endblock %}

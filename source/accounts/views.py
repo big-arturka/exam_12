@@ -9,14 +9,14 @@ from django.conf import settings
 
 from accounts.forms import MyUserCreationForm, UserChangeForm, ProfileChangeForm, \
     PasswordChangeForm, PasswordResetEmailForm, PasswordResetForm
-from .models import AuthToken, Profile
+from .models import AuthToken, Profile, Friend
 
 
 class IndexView(ListView):
     template_name = 'users/index.html'
     context_object_name = 'users'
-    paginate_by = 10
-    paginate_orphans = 4
+    paginate_by = 3
+    paginate_orphans = 2
 
     def get_queryset(self):
         return User.objects.all()
@@ -30,7 +30,7 @@ class RegisterView(CreateView):
     def form_valid(self, form):
         user = form.save()
         if settings.ACTIVATE_USERS_EMAIL:
-            return redirect('webapp:index')
+            return redirect('index')
         else:
             login(self.request, user)
             return redirect(self.get_success_url())
@@ -40,7 +40,7 @@ class RegisterView(CreateView):
         if not next_url:
             next_url = self.request.POST.get('next')
         if not next_url:
-            next_url = reverse('webapp:index')
+            next_url = reverse('index')
         return next_url
 
 
@@ -51,7 +51,7 @@ class RegisterActivateView(View):
             if token.is_alive():
                 self.activate_user(token)
             token.delete()
-        return redirect('webapp:index')
+        return redirect('index')
 
     def activate_user(self, token):
         user = token.user
@@ -67,6 +67,12 @@ class UserDetailView(DetailView):
     context_object_name = 'user_obj'
     paginate_related_by = 5
     paginate_related_orphans = 0
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        date = Friend.objects.filter(user=self.kwargs.get('pk'))
+        context['friends'] = date
+        return context
 
 
 class UserChangeView(UserPassesTestMixin, UpdateView):
@@ -133,7 +139,7 @@ class UserPasswordChangeView(LoginRequiredMixin, UpdateView):
 class UserPasswordResetEmailView(FormView):
     form_class = PasswordResetEmailForm
     template_name = 'users/password_reset_email.html'
-    success_url = reverse_lazy('webapp:index')
+    success_url = reverse_lazy('index')
 
     def form_valid(self, form):
         form.send_email()

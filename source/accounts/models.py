@@ -53,3 +53,8 @@ class Profile(models.Model):
     class Meta:
         verbose_name = 'Профиль'
         verbose_name_plural = 'Профили'
+
+
+class Friend(models.Model):
+    user = models.ForeignKey(get_user_model(), related_name='user_friends', verbose_name='Пользователь', on_delete=models.CASCADE)
+    friend = models.ForeignKey(get_user_model(), related_name='friend_friends', verbose_name='Друг', on_delete=models.CASCADE)

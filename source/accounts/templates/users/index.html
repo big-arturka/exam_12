@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{#{% load invite %}#}
+{% load static %}
+{% block title %}Project{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="title">All 'VA' users</h1>
+
+        {% for user in users %}
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        {% if user.profile.avatar %}
+                            <img src="{{ user.profile.avatar.url }}" style="height: 150px" class="card-img" alt="Avatar">
+                        {% else %}
+                            <img src="{% static 'img/avatar.png' %}" style="height: 150px" class="card-img" alt="Pusto">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title"><a href="{% url 'accounts:detail' user.pk %}">{{ user.username }}</a></h5>
+                            <p class="card-text"><small class="text-muted">Имя: {{ user.first_name }}</small></p>
+                            <p class="card-text"><small class="text-muted">Фамилия: {{ user.last_name }}</small></p>
+                            {% if user.is_authenticated %}
+                            <p>
+                                <a class="add" href="{% url 'api:add' user.pk %}">Add to friends</a>
+                            </p>
+                    {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="pagina" style="margin: 50px 50px 50px 50px;">
+        {% if is_paginated %}
+            {% include 'partial/pagination.html' %}
+        {% endif %}
+    </div>
+{% endblock %}
